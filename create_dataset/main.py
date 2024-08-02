@@ -2,17 +2,19 @@ from create_dataset.processing_data.implemented_data_processing.DiseasePredictio
     DiseasePredictionUsingMachineLearning
 
 
-def process_data():
+def generate_dataset():
     implemented_data_processing_classes = [
-        DiseasePredictionUsingMachineLearning(),
+        DiseasePredictionUsingMachineLearning,
     ]
     for implemented_data_processing_class in implemented_data_processing_classes:
-        implemented_data_processing_class.prepare_data()
-        implemented_data_processing_class.generate_qa_dataset()
+        implemented_data_processing = implemented_data_processing_class()
+        implemented_data_processing.prepare_data()
+        implemented_data_processing.generate_qa_dataset()
+        implemented_data_processing.save_results()
 
 
 def main():
-    process_data()
+    generate_dataset()
 
 
 if __name__ == '__main__':
