@@ -18,5 +18,5 @@ class DataProcessingBase(abc.ABC):
         pass
 
     def save_results(self):
-        with open(f'create_dataset/data/qa_raw_data/{self.dataset_name}.json', 'wb') as f:
+        with open(f'creating_dataset/data/qa_raw_data/{self.dataset_name}.json', 'wb') as f:
             f.write(json.dumps(self.qa_json, indent=4).encode())

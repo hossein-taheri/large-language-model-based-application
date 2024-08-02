@@ -1,6 +1,6 @@
 import pandas as pd
 
-from create_dataset.processing_data.DataProcessingBase import DataProcessingBase
+from creating_dataset.processing_data.DataProcessingBase import DataProcessingBase
 
 
 class DiseasePredictionUsingMachineLearning(DataProcessingBase):
@@ -10,9 +10,9 @@ class DiseasePredictionUsingMachineLearning(DataProcessingBase):
     def prepare_data(self):
         print("Preparing data on dataset ::", self.dataset_name)
 
-        training_df = pd.read_csv(f"create_dataset/data/unprocessed_data/{self.dataset_name}/Training.csv")
+        training_df = pd.read_csv(f"creating_dataset/data/unprocessed_data/{self.dataset_name}/Training.csv")
         training_df.drop("Unnamed: 133", axis=1, inplace=True)
-        testing_df = pd.read_csv(f"create_dataset/data/unprocessed_data/{self.dataset_name}/Testing.csv")
+        testing_df = pd.read_csv(f"creating_dataset/data/unprocessed_data/{self.dataset_name}/Testing.csv")
         combined_df = pd.concat([training_df, testing_df])
 
         self.dataframe = combined_df
