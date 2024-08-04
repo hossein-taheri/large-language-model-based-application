@@ -1,6 +1,8 @@
 from creating_dataset.processing_data.QADatasetManagement import QADatasetManagement
 from creating_dataset.processing_data.implemented_data_processing.DiseasePredictionUsingMachineLearning import \
     DiseasePredictionUsingMachineLearning
+from creating_dataset.processing_data.implemented_data_processing.MedicalQuestionAnsweringDataset import \
+    MedicalQuestionAnsweringDataset
 
 
 def generate_datasets():
@@ -9,6 +11,7 @@ def generate_datasets():
 
     implemented_data_processing_classes = [
         DiseasePredictionUsingMachineLearning,
+        MedicalQuestionAnsweringDataset,
     ]
     for implemented_data_processing_class in implemented_data_processing_classes:
         implemented_data_processing = implemented_data_processing_class()
