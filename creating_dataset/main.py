@@ -1,3 +1,4 @@
+from creating_dataset.processing_data.DataProcessingBase import DataProcessingBase
 from creating_dataset.processing_data.QADatasetManagement import QADatasetManagement
 from creating_dataset.processing_data.implemented_data_processing.DiseasePredictionUsingMachineLearning import \
     DiseasePredictionUsingMachineLearning
@@ -5,6 +6,7 @@ from creating_dataset.processing_data.implemented_data_processing.MedicalQuestio
     MedicalQuestionAnsweringDataset
 from creating_dataset.processing_data.implemented_data_processing.DiseaseSymptomKnowledgeDatabase import \
     DiseaseSymptomKnowledgeDatabase
+from creating_dataset.processing_data.implemented_data_processing.SymptomDiseaseDataset import SymptomDiseaseDataset
 
 
 def generate_datasets():
@@ -13,8 +15,9 @@ def generate_datasets():
 
     implemented_data_processing_classes = [
         DiseasePredictionUsingMachineLearning,
-        MedicalQuestionAnsweringDataset,
-        DiseaseSymptomKnowledgeDatabase,
+        # MedicalQuestionAnsweringDataset,
+        # DiseaseSymptomKnowledgeDatabase,
+        SymptomDiseaseDataset,
     ]
     for implemented_data_processing_class in implemented_data_processing_classes:
         implemented_data_processing = implemented_data_processing_class()
