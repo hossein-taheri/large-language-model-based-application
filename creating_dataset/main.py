@@ -15,8 +15,8 @@ def generate_datasets():
 
     implemented_data_processing_classes = [
         DiseasePredictionUsingMachineLearning,
-        # MedicalQuestionAnsweringDataset,
-        # DiseaseSymptomKnowledgeDatabase,
+        # MedicalQuestionAnsweringDataset, # This is a big dataset
+        # DiseaseSymptomKnowledgeDatabase, # Not a useful dataset
         SymptomDiseaseDataset,
     ]
     for implemented_data_processing_class in implemented_data_processing_classes:

@@ -21,4 +21,6 @@ class QADatasetManagement:
                     json_data += json.loads(f.read())
 
         with open(os.path.join(self.qa_directory, "qa_dataset.jsonl"), 'w') as file:
-            file.write(json.dumps(json_data, indent=4))
+            for item in json_data:
+                json.dump(item, file)
+                file.write('\n')

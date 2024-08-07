@@ -32,11 +32,9 @@ class DiseaseSymptomKnowledgeDatabase(DataProcessingBase):
         symptoms = ', '.join([symptom.replace('_', ' ') for symptom in symptoms])
         disease = disease.replace('_', ' ')
 
-        qa_pairs = [
-            {
-                'prompt': f"What disease is associated with these symptoms: {symptoms}?",
-                'completion': f"The disease associated with these symptoms is {disease}."
-            }
-        ]
+        qa_pairs = {
+            'prompt': f"What disease is associated with these symptoms: {symptoms}?",
+            'completion': f"The disease associated with these symptoms is {disease}."
+        }
 
         return qa_pairs

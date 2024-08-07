@@ -33,11 +33,9 @@ class DiseasePredictionUsingMachineLearning(DataProcessingBase):
         symptoms = ', '.join([symptom.replace('_', ' ') for symptom in symptom_columns if row[symptom] == 1])
         disease = row['prognosis']
 
-        qa_pairs = [
-            {
-                'prompt': f"What disease is associated with these symptoms: {symptoms}?",
-                'completion': f"The disease associated with these symptoms is {disease}."
-            }
-        ]
+        qa_pairs = {
+            'prompt': f"What disease is associated with these symptoms: {symptoms}?",
+            'completion': f"The disease associated with these symptoms could be {disease}."
+        }
 
         return qa_pairs
