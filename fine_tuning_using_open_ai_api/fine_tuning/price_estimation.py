@@ -32,9 +32,8 @@ def estimate_fine_tuning_cost(jsonl_file):
     return total_tokens_per_model, fine_tuning_costs
 
 
-def predict_qa_dataset_price():
-    jsonl_file = 'fine_tuning_using_open_ai_api/data/qa_dataset.jsonl'
-    total_tokens, costs = estimate_fine_tuning_cost(jsonl_file)
+def predict_qa_dataset_price(jsonl_file_path):
+    total_tokens, costs = estimate_fine_tuning_cost(jsonl_file_path)
     for model, total_tokens in total_tokens.items():
         print(f"The estimated total tokens of your data in {model} is {total_tokens}")
     print("\n")
