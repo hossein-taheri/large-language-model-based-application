@@ -12,11 +12,12 @@ def estimate_fine_tuning_cost(jsonl_file):
 
     total_tokens_per_model = {
         model_name: sum(
-            len(encodings[model_name].encode(example['prompt'])) + len(
-                encodings[model_name].encode(example['completion'])
+            sum(
+                len(
+                    encodings[model_name].encode(example['messages'][index]['content'])
+                ) for index in range(len(example['messages']))
             ) for example in examples
-        )
-        for model_name in encodings
+        ) for model_name in encodings
     }
 
     cost_per_1m_tokens = {
