@@ -1,8 +1,6 @@
 import json
-
 import pandas as pd
-
-from creating_dataset.processing_data.DataProcessingBase import DataProcessingBase
+from creating_dataset.processing_data.data_processing_base import DataProcessingBase
 
 
 class SymptomDiseaseDataset(DataProcessingBase):

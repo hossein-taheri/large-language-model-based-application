@@ -1,5 +1,5 @@
 import json
-from creating_dataset.processing_data.DataProcessingBase import DataProcessingBase
+from creating_dataset.processing_data.data_processing_base import DataProcessingBase
 
 
 class DiseaseSymptomKnowledgeDatabase(DataProcessingBase):
