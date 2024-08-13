@@ -13,14 +13,23 @@ class QADatasetManagement:
                 os.remove(json_file)
 
     def generate_one_dataset_file(self):
-        json_data = []
+        data = []
+        test_data = []
         for file in os.listdir(self.qa_directory):
             if file.endswith('.json'):
                 json_file = os.path.join(self.qa_directory, file)
-                with open(json_file, 'r') as f:
-                    json_data += json.loads(f.read())
+                f = open(json_file, 'r')
+                if not file.__contains__('test'):
+                    data += json.loads(f.read())
+                else:
+                    test_data += json.loads(f.read())
 
         with open(os.path.join(self.qa_directory, "qa_dataset.jsonl"), 'w') as file:
-            for item in json_data:
+            for item in data:
+                json.dump(item, file)
+                file.write('\n')
+
+        with open(os.path.join(self.qa_directory, "qa_dataset_test.jsonl"), 'w') as file:
+            for item in test_data:
                 json.dump(item, file)
                 file.write('\n')
