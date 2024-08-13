@@ -24,6 +24,29 @@ class QADatasetManagement:
                 else:
                     test_data += json.loads(f.read())
 
+        all_data = [data, test_data]
+        for all_data_index in range(len(all_data)):
+            new_data = []
+            for prompt_answer_pair in all_data[all_data_index]:
+                new_data.append({
+                    "messages": [
+                        {
+                            "role": "system",
+                            "content": "You are an empathetic medical assistant to help detection of disease.",
+                        },
+                        {
+                            "role": "user",
+                            "content": prompt_answer_pair['prompt'],
+                        },
+                        {
+                            "role": "assistant",
+                            "content": prompt_answer_pair['completion'],
+                        },
+                    ]
+                })
+            all_data[all_data_index] = new_data
+        data, test_data = all_data
+
         with open(os.path.join(self.qa_directory, "qa_dataset.jsonl"), 'w') as file:
             for item in data:
                 json.dump(item, file)
