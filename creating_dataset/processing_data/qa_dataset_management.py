@@ -24,6 +24,16 @@ class QADatasetManagement:
                 else:
                     test_data += json.loads(f.read())
 
+        with open(os.path.join(self.qa_directory, "json_qa_dataset.jsonl"), 'w') as file:
+            for item in data:
+                json.dump(item, file)
+                file.write('\n')
+
+        with open(os.path.join(self.qa_directory, "json_qa_dataset_test.jsonl"), 'w') as file:
+            for item in test_data:
+                json.dump(item, file)
+                file.write('\n')
+
         all_data = [data, test_data]
         for all_data_index in range(len(all_data)):
             new_data = []
