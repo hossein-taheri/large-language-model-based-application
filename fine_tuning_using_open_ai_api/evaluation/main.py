@@ -3,6 +3,7 @@ import cmd
 from fine_tuning_using_open_ai_api.evaluation.commands.extracting_metrics_command import ExtractingMetricsCommand
 from fine_tuning_using_open_ai_api.evaluation.commands.plotting_command import PlottingCommand
 from fine_tuning_using_open_ai_api.evaluation.commands.response_gathering_command import ResponseGathering
+from fine_tuning_using_open_ai_api.evaluation.commands.statistical_tests_command import StatisticalTestsCommand
 
 
 class Evaluation(cmd.Cmd):
@@ -13,6 +14,9 @@ class Evaluation(cmd.Cmd):
 
     def do_extracting_metrics(self, line):
         ExtractingMetricsCommand().run()
+
+    def do_statistical_tests(self, line):
+        StatisticalTestsCommand().run()
 
     def do_plotting(self, line):
         PlottingCommand().run()
