@@ -3,7 +3,7 @@ import json
 import numpy as np
 from scipy.stats import ttest_rel
 
-from fine_tuning_using_open_ai_api.evaluation.commands.base_command import BaseCommand
+from fine_tuning_using_open_ai_api.utils.base_command import BaseCommand
 
 
 class StatisticalTestsCommand(BaseCommand):

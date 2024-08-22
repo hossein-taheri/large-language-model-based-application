@@ -1,7 +1,6 @@
 import json
 from openai import OpenAI
-from fine_tuning_using_open_ai_api.utils import import_env_variables
-from fine_tuning_using_open_ai_api.evaluation.commands.base_command import BaseCommand
+from fine_tuning_using_open_ai_api.utils.base_command import BaseCommand
 
 
 class ResponseGathering(BaseCommand):

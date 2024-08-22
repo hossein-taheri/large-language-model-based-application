@@ -22,8 +22,7 @@ class BaseCommand(ABC):
         try:
             self.setup()
             self.execute()
+            self.cleanup()
         except Exception as e:
             print(f"Error during execution: {e.__str__()}")
             print(traceback.format_exc())
-        finally:
-            self.cleanup()

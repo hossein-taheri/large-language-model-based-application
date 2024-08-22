@@ -2,7 +2,7 @@ import json
 
 from rouge_score import rouge_scorer
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
-from fine_tuning_using_open_ai_api.evaluation.commands.base_command import BaseCommand
+from fine_tuning_using_open_ai_api.utils.base_command import BaseCommand
 
 
 class ExtractingMetricsCommand(BaseCommand):
