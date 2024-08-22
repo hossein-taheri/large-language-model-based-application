@@ -1,5 +1,5 @@
+import os
 import cmd
-
 from fine_tuning_using_open_ai_api.evaluation.commands.extracting_metrics_command import ExtractingMetricsCommand
 from fine_tuning_using_open_ai_api.evaluation.commands.plotting_command import PlottingCommand
 from fine_tuning_using_open_ai_api.evaluation.commands.response_gathering_command import ResponseGathering
@@ -21,7 +21,10 @@ class Evaluation(cmd.Cmd):
     def do_plotting(self, line):
         PlottingCommand().run()
 
-    def do_quit(self, line):
+    def do_clear(self, line):
+        os.system('cls' if os.name == 'nt' else 'clear')
+
+    def do_exit(self, line):
         return True
 
 
