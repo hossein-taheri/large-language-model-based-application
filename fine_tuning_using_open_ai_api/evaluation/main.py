@@ -1,5 +1,6 @@
 import os
 import cmd
+from fine_tuning_using_open_ai_api.utils import import_env_variables
 from fine_tuning_using_open_ai_api.evaluation.commands.extracting_metrics_command import ExtractingMetricsCommand
 from fine_tuning_using_open_ai_api.evaluation.commands.plotting_command import PlottingCommand
 from fine_tuning_using_open_ai_api.evaluation.commands.response_gathering_command import ResponseGathering

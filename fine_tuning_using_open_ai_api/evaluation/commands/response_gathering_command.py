@@ -9,8 +9,11 @@ class ResponseGathering(BaseCommand):
 
         self.client = OpenAI()
         self.base_model = "gpt-4o-mini-2024-07-18"
-        self.fine_tuned_model = "ft:gpt-4o-mini-2024-07-18:personal::9uW8lVcz"
-        self.test_datasets = {}
+        self.fine_tuned_model = "ft:gpt-4o-mini-2024-07-18:personal::9zIBverq"
+        self.test_datasets = {
+            "test": [],
+            "unseen_test": [],
+        }
         self.prompt = "Answer only in this format : 'The disease associated with these symptoms could be {disease}' and dont say anything more about that. "
         self.responses = {}
 
@@ -18,12 +21,12 @@ class ResponseGathering(BaseCommand):
         with open("fine_tuning_using_open_ai_api/data/qa_dataset_test.jsonl", 'r') as file:
             for line in file:
                 data = json.loads(line.strip())
-                self.test_datasets["test"] = data
+                self.test_datasets["test"].append(data)
 
         with open("fine_tuning_using_open_ai_api/data/qa_dataset_unseen_test.jsonl", 'r') as file:
             for line in file:
                 data = json.loads(line.strip())
-                self.test_datasets["unseen_test"] = data
+                self.test_datasets["unseen_test"].append(data)
 
         for key in self.test_datasets:
             self.responses[key] = {
