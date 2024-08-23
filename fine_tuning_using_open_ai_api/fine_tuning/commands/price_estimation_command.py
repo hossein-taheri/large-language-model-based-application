@@ -4,7 +4,7 @@ from fine_tuning_using_open_ai_api.utils.base_command import BaseCommand
 
 
 class PriceEstimationCommand(BaseCommand):
-    def __init__(self, file_path="fine_tuning_using_open_ai_api/data/qa_dataset.jsonl"):
+    def __init__(self, file_path="fine_tuning_using_open_ai_api/data/qa_dataset_train.jsonl"):
         super().__init__(name=self.__class__.__name__)
         self.encodings = {
             'gpt-3.5-turbo': tiktoken.encoding_for_model("gpt-3.5-turbo"),

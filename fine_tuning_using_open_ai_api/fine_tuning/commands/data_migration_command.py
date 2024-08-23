@@ -15,9 +15,10 @@ class DataMigrationCommand(BaseCommand):
         self.source_dataset_path = source_dataset_path
         self.dataset_path = dataset_path
         self.files = [
-            'qa_dataset.jsonl',
+            'qa_dataset_train.jsonl',
+            'qa_dataset_val.jsonl',
             'qa_dataset_test.jsonl',
-            'qa_dataset_val.jsonl'
+            'qa_dataset_unseen_test.jsonl',
         ]
 
     def setup(self):
