@@ -9,12 +9,15 @@ class ResponseGathering(BaseCommand):
 
         self.client = OpenAI()
         self.base_model = "gpt-4o-mini-2024-07-18"
+        self.base_model_default_content = """
+                You are a general chat-bot and You must avoid all kind of professional opinions on sensitive matters such as health or other specialized fields. For such matters, consulting a professional is always recommended.
+        """
         self.fine_tuned_model = "ft:gpt-4o-mini-2024-07-18:personal::9zIBverq"
         self.test_datasets = {
             "test": [],
             "unseen_test": [],
         }
-        self.prompt = "Answer only in this format : 'The disease associated with these symptoms could be {disease}' and dont say anything more about that. "
+        self.prompt = "Answer in this format : The disease associated with these symptoms could be disease"
         self.responses = {}
 
     def setup(self):
@@ -59,7 +62,7 @@ class ResponseGathering(BaseCommand):
                 prompt = data["messages"][1]["content"]
                 reference = data["messages"][2]["content"]
 
-                base_model_response = self.get_response(self.base_model, prompt, system_content)
+                base_model_response = self.get_response(self.base_model, prompt, self.base_model_default_content)
                 fine_tuned_model_response = self.get_response(self.fine_tuned_model, prompt, system_content)
 
                 self.responses[key]["reference"].append(reference)
