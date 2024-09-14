@@ -1,6 +1,9 @@
 import os
 import cmd
+
 from fine_tuning_using_open_ai_api.utils import import_env_variables
+from fine_tuning_using_open_ai_api.evaluation.commands.extract_classification_metrics import \
+    ExtractingClassificationMetricsCommand
 from fine_tuning_using_open_ai_api.evaluation.commands.extracting_metrics_command import ExtractingMetricsCommand
 from fine_tuning_using_open_ai_api.evaluation.commands.plotting_command import PlottingCommand
 from fine_tuning_using_open_ai_api.evaluation.commands.response_gathering_command import ResponseGathering
@@ -12,6 +15,9 @@ class Evaluation(cmd.Cmd):
 
     def do_response_gathering(self, line):
         ResponseGathering().run()
+
+    def do_extracting_classification_metrics(self, line):
+        ExtractingClassificationMetricsCommand().run()
 
     def do_extracting_metrics(self, line):
         ExtractingMetricsCommand().run()

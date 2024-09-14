@@ -34,7 +34,7 @@ class DiseaseSymptomKnowledgeDatabase(DataProcessingBase):
 
         qa_pairs = {
             'prompt': f"What disease is associated with these symptoms: {symptoms}?",
-            'completion': f"The disease associated with these symptoms is {disease}."
+            'completion': f'{{"disease_name" : "{disease.lower()}"}}'
         }
 
         return qa_pairs

@@ -42,8 +42,8 @@ class UploadingFilesCommand(BaseCommand):
 class FineTuningCommand(BaseCommand):
     def __init__(
             self,
-            training_file_id="file-YxugfcbRJDmUCkrzFV4cAzWC",
-            validation_file_id="file-sdnMQjNST6kMl7WfqOj14prl"
+            training_file_id="file-DdQHBEtXfUT4yJc2remoH9zK",
+            validation_file_id="file-UZx0kAFSegfrrM4B2KnmOF9w"
     ):
         super().__init__(name=self.__class__.__name__)
         self.client = OpenAI()
@@ -57,7 +57,7 @@ class FineTuningCommand(BaseCommand):
         self.client.fine_tuning.jobs.create(
             training_file=self.training_file_id,
             validation_file=self.validation_file_id,
-            model="gpt-4o-mini-2024-07-18"
+            model="ft:gpt-4o-mini-2024-07-18"
         )
 
     def cleanup(self):

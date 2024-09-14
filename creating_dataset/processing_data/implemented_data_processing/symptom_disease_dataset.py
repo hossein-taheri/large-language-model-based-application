@@ -37,7 +37,7 @@ class SymptomDiseaseDataset(DataProcessingBase):
     def generate_qa_pairs(row):
         qa_pairs = {
             'prompt': f"What disease is associated with these symptoms: {row['text']}?",
-            'completion': f"The disease associated with these symptoms could be {row['label']}."
+            'completion': f'{{"disease_name" : "{row["label"].lower()}"}}'
         }
 
         return qa_pairs

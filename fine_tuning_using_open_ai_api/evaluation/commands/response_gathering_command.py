@@ -12,12 +12,12 @@ class ResponseGathering(BaseCommand):
         self.base_model_default_content = """
                 You are a general chat-bot and You must avoid all kind of professional opinions on sensitive matters such as health or other specialized fields. For such matters, consulting a professional is always recommended.
         """
-        self.fine_tuned_model = "ft:gpt-4o-mini-2024-07-18:personal::9zIBverq"
+        self.fine_tuned_model = "ft:gpt-4o-mini-2024-07-18:personal::A093zQF2"
         self.test_datasets = {
             "test": [],
             "unseen_test": [],
         }
-        self.prompt = "Answer in this format : The disease associated with these symptoms could be disease"
+        self.prompt = 'Answer only in this format and dont say anything more (Only common name of the most probable disease in a JSON Object as value): "{"disease_name" : "{predicted_disease_name}"}". '
         self.responses = {}
 
     def setup(self):

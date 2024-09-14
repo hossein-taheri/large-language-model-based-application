@@ -47,7 +47,7 @@ class ReportedSymptomsAndDiagnosedDiseaseTest(DataProcessingBase):
     def generate_qa_pairs(disease):
         qa_pairs = {
             'prompt': f"What disease is associated with these symptoms: {disease['Reported Symptoms'].lower()}?",
-            'completion': f"The disease associated with these symptoms is {disease['Diagnosed Disease'].lower()}."
+            'completion': f'{{"disease_name" : "{disease["Diagnosed Disease"].lower()}"}}'
         }
 
         return qa_pairs
