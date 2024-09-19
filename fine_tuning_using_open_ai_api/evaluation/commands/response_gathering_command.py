@@ -105,7 +105,6 @@ class ResponseGathering(BaseCommand):
                             self.get_gpt_response(self.fine_tuned_model, prompt, system_content)
                         )
                     else:
-                        sleep(15)
                         self.responses[key][model_name].append(
                             self.get_hugging_chat_response(model_name, prompt, system_content)
                         )
