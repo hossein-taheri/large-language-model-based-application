@@ -105,9 +105,16 @@ class ResponseGathering(BaseCommand):
                             self.get_gpt_response(self.fine_tuned_model, prompt, system_content)
                         )
                     else:
-                        self.responses[key][model_name].append(
-                            self.get_hugging_chat_response(model_name, prompt, system_content)
-                        )
+                        while True:
+                            try:
+                                self.responses[key][model_name].append(
+                                    self.get_hugging_chat_response(model_name, prompt, system_content)
+                                )
+                            except hugchat.exceptions.ModelOverloadedError as e:
+                                print(e.__str__())
+                                continue
+                            break
+
                 print(
                     f"Completed for {index + 1} out of {len(self.test_datasets[key])} of {len(self.test_datasets)} dataset"
                 )
