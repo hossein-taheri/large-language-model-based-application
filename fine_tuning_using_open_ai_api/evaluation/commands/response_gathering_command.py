@@ -107,6 +107,7 @@ class ResponseGathering(BaseCommand):
                     else:
                         while True:
                             try:
+                                sleep(8)
                                 self.responses[key][model_name].append(
                                     self.get_hugging_chat_response(model_name, prompt, system_content)
                                 )
