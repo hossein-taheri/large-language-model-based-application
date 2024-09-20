@@ -6,23 +6,35 @@ from fine_tuning_using_open_ai_api.utils.base_command import BaseCommand
 
 class ExtractingClassificationMetricsCommand(BaseCommand):
     def __init__(self):
-        self.base_model_scores = {}
-        self.fine_tuned_model_scores = {}
+        self.models = {
+            "base_model": {},
+            "fine_tuned_model": {},
+            "meta-llama/Meta-Llama-3.1-70B-Instruct": {},
+            "CohereForAI/c4ai-command-r-plus-08-2024": {},
+            "mistralai/Mixtral-8x7B-Instruct-v0.1": {},
+            "microsoft/Phi-3-mini-4k-instruct": {},
+        }
         self.responses = {}
 
     def setup(self):
         with open('fine_tuning_using_open_ai_api/data/results/responses.json') as f:
             self.responses = json.load(f)
             for key in self.responses:
-                for index, model_response in enumerate(self.responses[key]):
-                    for i, data_row in enumerate(self.responses[key][model_response]):
-                        print(i, data_row, model_response, key)
-                        self.responses[key][model_response][i] = json.loads(self.responses[key][model_response][i])[
-                            'disease_name']
+                for index, model_name in enumerate(self.responses[key]):
+                    for i, data_row in enumerate(self.responses[key][model_name]):
+                        try:
+                            self.responses[key][model_name][i] = json.loads(self.responses[key][model_name][i])[
+                                'disease_name']
+                        except:
+                            self.responses[key][model_name][i] = ""
 
         for key in self.responses:
-            self.base_model_scores[key] = {"accuracy": 0, "precision": 0, "recall": 0, "f1": 0}
-            self.fine_tuned_model_scores[key] = {"accuracy": 0, "precision": 0, "recall": 0, "f1": 0}
+            for model_name in self.models:
+                self.models[model_name][key] = {
+                    "accuracy": 0,
+                    "error_rate": 0,
+                    # "parsing_error_rate": 0,
+                }
 
     def string_cleaner(self, string):
         string = string.lower().strip()
@@ -32,96 +44,40 @@ class ExtractingClassificationMetricsCommand(BaseCommand):
         return string
 
     def is_similar(self, str1, str2, threshold=0.9):
+        if str1 == "" or str2 == "":
+            return False
         str2_split = str2.split("_")
         str1_split = str1.split("_")
-        # print(str1_split, str2_split)
         for str1_item in str1_split:
             for str2_item in str2_split:
                 if str1_item == str2_item:
                     return True
-        # similarity_ratio = SequenceMatcher(None, str1, str2).ratio()
         return str1.__contains__(str2) or str2.__contains__(str1)
 
     def execute(self):
         for key in self.responses:
             reference_responses = [self.string_cleaner(item) for item in self.responses[key]["reference"]]
-            base_model_responses = [self.string_cleaner(item) for item in self.responses[key]["base_model"]]
-            fine_tuned_model_responses = [self.string_cleaner(item) for item in self.responses[key]["fine_tuned_model"]]
+            for model_name in self.models:
+                model_responses = [self.string_cleaner(item) for item in self.responses[key][model_name]]
 
-            adjusted_base_model_responses = []
-            adjusted_fine_tuned_model_responses = []
-            for index, (ref, model) in enumerate(zip(reference_responses, base_model_responses)):
-                if self.is_similar(ref, model):
-                    adjusted_base_model_responses.append(ref)
-                else:
-                    adjusted_base_model_responses.append(model)
-            for index, (ref, model) in enumerate(zip(reference_responses, fine_tuned_model_responses)):
-                if self.is_similar(ref, model):
-                    adjusted_fine_tuned_model_responses.append(ref)
-                else:
-                    if key == "unseen_test":
-                        print(index, model)
-                    adjusted_fine_tuned_model_responses.append(model)
+                correct_predictions = 0
+                parsing_error_predictions = 0
+                total_predictions = 0
 
-            base_accuracy = accuracy_score(
-                reference_responses,
-                adjusted_base_model_responses
-            )
-            base_precision = precision_score(
-                reference_responses,
-                adjusted_base_model_responses,
-                average='macro',
-                zero_division=1
-            )
-            base_recall = recall_score(
-                reference_responses,
-                adjusted_base_model_responses,
-                average='macro',
-                zero_division=1
-            )
-            base_f1 = f1_score(
-                reference_responses,
-                adjusted_base_model_responses,
-                average='macro',
-                zero_division=1
-            )
+                for index, (ref, model) in enumerate(zip(reference_responses, model_responses)):
+                    if model == "":
+                        parsing_error_predictions += 1
+                    elif self.is_similar(ref, model):
+                        correct_predictions += 1
+                    total_predictions += 1
 
-            self.base_model_scores[key]["accuracy"] = base_accuracy
-            self.base_model_scores[key]["precision"] = base_precision
-            self.base_model_scores[key]["recall"] = base_recall
-            self.base_model_scores[key]["f1"] = base_f1
-
-            fine_tuned_accuracy = accuracy_score(
-                reference_responses,
-                adjusted_fine_tuned_model_responses
-            )
-            fine_tuned_precision = precision_score(
-                reference_responses,
-                adjusted_fine_tuned_model_responses,
-                average='macro',
-                zero_division=1
-            )
-            fine_tuned_recall = recall_score(
-                reference_responses,
-                adjusted_fine_tuned_model_responses,
-                average='macro',
-                zero_division=1
-            )
-            fine_tuned_f1 = f1_score(
-                reference_responses,
-                adjusted_fine_tuned_model_responses,
-                average='macro',
-                zero_division=1
-            )
-
-            self.fine_tuned_model_scores[key]["accuracy"] = fine_tuned_accuracy
-            self.fine_tuned_model_scores[key]["precision"] = fine_tuned_precision
-            self.fine_tuned_model_scores[key]["recall"] = fine_tuned_recall
-            self.fine_tuned_model_scores[key]["f1"] = fine_tuned_f1
+                accuracy = correct_predictions / total_predictions if total_predictions > 0 else 0
+                parsing_error_rate = parsing_error_predictions / total_predictions if total_predictions > 0 else 0
+                error_rate = 1 - accuracy
+                self.models[model_name][key]["accuracy"] = accuracy
+                self.models[model_name][key]["error_rate"] = error_rate
+                # self.models[model_name][key]["parsing_error_rate"] = parsing_error_rate
 
     def cleanup(self):
-        with open("fine_tuning_using_open_ai_api/data/results/scores/base_model_metric_scores.json", "w") as out:
-            json.dump(self.base_model_scores, out, indent=4)
-
-        with open("fine_tuning_using_open_ai_api/data/results/scores/fine_tuned_model_metric_scores.json", "w") as out:
-            json.dump(self.fine_tuned_model_scores, out, indent=4)
+        with open("fine_tuning_using_open_ai_api/data/results/scores/results.json", "w") as out:
+            json.dump(self.models, out, indent=4)

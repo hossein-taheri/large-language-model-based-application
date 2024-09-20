@@ -1,6 +1,8 @@
 import os
 import cmd
 
+from fine_tuning_using_open_ai_api.evaluation.commands.plotting_classification_command import \
+    PlottingClassificationCommand
 from fine_tuning_using_open_ai_api.utils import import_env_variables
 from fine_tuning_using_open_ai_api.evaluation.commands.extract_classification_metrics import \
     ExtractingClassificationMetricsCommand
@@ -27,6 +29,9 @@ class Evaluation(cmd.Cmd):
 
     def do_plotting(self, line):
         PlottingCommand().run()
+
+    def do_plotting_classification(self, line):
+        PlottingClassificationCommand().run()
 
     def do_clear(self, line):
         os.system('cls' if os.name == 'nt' else 'clear')
