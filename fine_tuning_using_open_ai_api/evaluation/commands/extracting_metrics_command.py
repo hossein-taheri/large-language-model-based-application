@@ -7,16 +7,27 @@ from fine_tuning_using_open_ai_api.utils.base_command import BaseCommand
 
 class ExtractingMetricsCommand(BaseCommand):
     def __init__(self):
-        self.base_model_scores = {}
-        self.fine_tuned_model_scores = {}
         self.responses = {}
+        self.models = {
+            "base_model": {},
+            "fine_tuned_model": {},
+            "meta-llama/Meta-Llama-3.1-70B-Instruct": {},
+            "CohereForAI/c4ai-command-r-plus-08-2024": {},
+            "mistralai/Mixtral-8x7B-Instruct-v0.1": {},
+            "microsoft/Phi-3-mini-4k-instruct": {},
+        }
 
     def setup(self):
         with open('fine_tuning_using_open_ai_api/data/results/responses.json') as f:
             self.responses = json.load(f)
         for key in self.responses:
-            self.base_model_scores[key] = {"bleu": [], "rouge1": [], "rouge2": [], "rougeL": []}
-            self.fine_tuned_model_scores[key] = {"bleu": [], "rouge1": [], "rouge2": [], "rougeL": []}
+            for model_name in self.models:
+                self.models[model_name][key] = {
+                    "bleu": [],
+                    "rouge1": [],
+                    "rouge2": [],
+                    "rougeL": []
+                }
 
     def calculate_bleu(self, reference, candidate):
         reference = [reference.split()]
@@ -34,25 +45,17 @@ class ExtractingMetricsCommand(BaseCommand):
         for key in self.responses:
             for index, response in enumerate(self.responses[key]["reference"]):
                 reference = self.responses[key]["reference"][index]
-                base_model_response = self.responses[key]["base_model"][index]
-                fine_tuned_model_response = self.responses[key]["fine_tuned_model"][index]
+                for model_name in self.models:
+                    model_response = self.responses[key][model_name][index]
 
-                base_bleu = self.calculate_bleu(reference, base_model_response)
-                fine_tuned_bleu = self.calculate_bleu(reference, fine_tuned_model_response)
+                    model_bleu = self.calculate_bleu(reference, model_response)
+                    model_rouge = self.calculate_rouge(reference, model_response)
 
-                base_rouge = self.calculate_rouge(reference, base_model_response)
-                fine_tuned_rouge = self.calculate_rouge(reference, fine_tuned_model_response)
+                    self.models[model_name][key]["bleu"].append(model_bleu)
 
-                self.base_model_scores[key]["bleu"].append(base_bleu)
-                self.fine_tuned_model_scores[key]["bleu"].append(fine_tuned_bleu)
-                print(base_bleu, fine_tuned_bleu)
-                for rouge_metric in ['rouge1', 'rouge2', 'rougeL']:
-                    self.base_model_scores[key][rouge_metric].append(base_rouge[rouge_metric].fmeasure)
-                    self.fine_tuned_model_scores[key][rouge_metric].append(fine_tuned_rouge[rouge_metric].fmeasure)
+                    for rouge_metric in ['rouge1', 'rouge2', 'rougeL']:
+                        self.models[model_name][key][rouge_metric].append(model_rouge[rouge_metric].fmeasure)
 
     def cleanup(self):
-        with open("fine_tuning_using_open_ai_api/data/results/scores/base_model_metric_scores.json", "w") as out:
-            json.dump(self.base_model_scores, out, indent=4)
-
-        with open("fine_tuning_using_open_ai_api/data/results/scores/fine_tuned_model_metric_scores.json", "w") as out:
-            json.dump(self.fine_tuned_model_scores, out, indent=4)
+        with open("fine_tuning_using_open_ai_api/data/results/scores/model_metric_scores.json", "w") as out:
+            json.dump(self.models, out, indent=4)

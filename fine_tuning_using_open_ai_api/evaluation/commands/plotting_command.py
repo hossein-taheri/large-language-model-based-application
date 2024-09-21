@@ -6,26 +6,32 @@ from fine_tuning_using_open_ai_api.utils.base_command import BaseCommand
 class PlottingCommand(BaseCommand):
     def __init__(self):
         super().__init__(name=self.__class__.__name__)
-        self.base_model_data = self.fine_tuned_model_data = None
+        self.models_data = self.fine_tuned_model_data = None
 
     def setup(self):
-        with open('fine_tuning_using_open_ai_api/data/results/scores/base_model_metric_scores.json') as f:
-            self.base_model_data = json.load(f)
-
-        with open('fine_tuning_using_open_ai_api/data/results/scores/fine_tuned_model_metric_scores.json') as f:
-            self.fine_tuned_model_data = json.load(f)
+        with open('fine_tuning_using_open_ai_api/data/results/scores/model_metric_scores.json') as f:
+            self.models_data = json.load(f)
 
     def execute(self):
         metrics = ['bleu', 'rouge1', 'rouge2', 'rougeL']
+        keys = ["test", "unseen_test"]
+        colors = ["blue", "red", "green", "yellow", "white", "orange", "brown"]
 
         plt.style.use('dark_background')
 
-        for key in self.base_model_data:
+        for key in keys:
             for metric in metrics:
                 plt.figure(figsize=(10, 6))
-                plt.plot(self.base_model_data[key][metric], marker='o', linestyle='-', label='Base Model', color='blue')
-                plt.plot(self.fine_tuned_model_data[key][metric], marker='o', linestyle='-', label='Fine-Tuned Model',
-                         color='red')
+                for index, model_name in enumerate(self.models_data):
+                    if model_name not in ["base_model", "fine_tuned_model"]:
+                        continue
+                    plt.plot(
+                        self.models_data[model_name][key][metric],
+                        marker='o',
+                        linestyle='-',
+                        label=f'{model_name.upper()} Model',
+                        color=colors[index],
+                    )
                 plt.title(f'Comparison of {metric.upper()}', color='white')
                 plt.ylim(0, 1)
                 plt.xlabel('Index', color='white')
